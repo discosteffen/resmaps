@@ -1,0 +1,167 @@
+<html>
+<head>
+
+<style>
+* { font-family: monospace; line-height: 1.5em; font-size: 13px; vertical-align: middle; }
+body { background-color: white; backface-visibility: hidden; }
+input#message { padding: 5px; width: 50%; height: 34px; }
+input#send { height: 34px; margin-left: -2px; }
+ul { padding: 0px; }
+li { list-style-type: none; border-top: 1px solid #eee; padding: 5px 0px; padding-left: 130px; }
+li:nth-child(odd) { background-color: #F9FAFD; }
+li b { color: #3F51B5; }
+small { color: #999; width: 130px; display: inline-block; text-align: right; margin-left: -136px; }
+</style>
+
+<script type="text/javascript" src="js/all.js" async></script>
+<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+<!--script type="text/javascript" src="http://127.0.0.1:43110:/1CyX49a6rLzzVqzKd5PkHCEhJi5bNAk7g/data/users/1F1kPoaP6gYYXVrVdPqMidEuticzVyUrny/data.json"></script-->
+<script type="text/javascript" src="js/new.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+
+
+</head>
+<body>
+
+
+
+
+<a href="#Select+user" id="select_user" onclick='return Page.selectUser()'>Select user</a>:
+<input type="hidden" id="message" onkeypress="if (event.keyCode == 13) Page.sendMessage()"><input type="hidden" id="send" value="Send!" onclick="return Page.sendMessage()"/>
+
+
+
+
+<div id="mapid" style="width: 1000px; height: 800px;"></div>
+
+
+
+
+<!-- below form saves lat and lon to specific json file. -->
+
+
+<FORM NAME="myform" ACTION="" METHOD="GET">Update Coordinates: <br/><br/>
+    <label>Enter Long : </label> <INPUT TYPE="text" NAME="inputBoxLong" VALUE=""><P>
+    <label>Enter Lat : </label> <INPUT TYPE="text" NAME="inputBoxLat" VALUE=""><P>
+    <INPUT TYPE="button" NAME="button" Value="Update Cords" onClick="return Page.sendMessage()">
+
+    <INPUT TYPE="button" NAME="button" Value="Update Cords from input" onClick="testResults(this.form)">
+</FORM>
+
+<p id="demo">Updated Coordinates</p>
+
+
+<!--input type="button" id="btn" value="long" onClick="lonGet()"/>
+<input type="button" id="btn" value="lat" onClick="latGet()"/>
+
+<p id="p">Lat / Lon </p-->
+
+<ul id="messages">
+ <li>map chat</li>
+</ul>
+
+
+<!--"testResults(this.form)"-->
+<!--input type="text" id="message" onkeypress="if (event.keyCode == 13) Page.sendMessage()"><input type="button" id="send" value="Send!" onclick="return Page.sendMessage()"/-->
+
+
+
+<!--script type="text/javascript" src="js/all.js" async></script>
+<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/new.js"></script-->
+
+
+<script type="text/javascript">
+  // script to get android data...
+
+    function lonGet(){
+    var tct = AndroidFunctionLong.getString();
+    document.getElementById("p").innerHTML = tct;
+    alert(tct);
+    }
+
+    function latGet(){
+    var tct = AndroidFunctionLat.getString();
+    document.getElementById("p").innerHTML = tct;
+    alert(tct);
+    }
+
+</script>
+
+<script LANGUAGE="JavaScript">
+
+// set variables to location default. Can parse the GPS data here when in app. Or even do geolocation
+// if available...
+
+var newLong = -82.4445969;
+var newLat = 27.9617669;
+
+//var inputLong = -82.4445969;
+//var inputLat = 27.9617669;
+
+
+function testResults (form) {
+// from android
+//  var androidLong = AndroidFunctionLong.getString();
+//  var androidLat = AndroidFunctionLat.getString();
+
+alert("Test");
+
+var inputBoxLong;
+var inputBoxLat;
+
+    inputLong = AndroidFunctionLong.getString();
+    inputLat =  AndroidFunctionLat.getString();
+
+		checkCoords();
+
+    newLong = inputLong;
+    newLat = inputLat;
+
+    document.getElementById('demo').innerHTML += '<br/>' + ' New Long : ' + inputLong + ' New Lat : ' + inputLat;
+  }
+
+
+	var map = L.map('mapid').setView([27.961813431845286, -82.44434137273832], 14);
+
+// world side try to use general ipfs for this one since they already generated tiles... if possible
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+			minZoom: 0,
+			maxZoom: 17
+	}).addTo(map);
+
+  // tileLayer from zoom 10 to 19 local on server.  add higher zooms later from ipfs
+
+/* IPFS map tiles
+	minZoom: 10
+  L.tileLayer('http://localhost:8080/ipfs/QmXSApttF4Q7SumHELnksfnwbsHCPeGfdKA28wmFk37Z3Q/{z}/{x}/{y}.png', {
+      maxZoom: 11,
+  }).addTo(map);
+*/
+  // basecamp marker
+
+/*
+	L.marker([27.9617669, -82.4445969]).addTo(map)
+		.bindPopup("<b>Hello world!</b><br />This is basecamp!. <br />Long: " + newLong + " Lat : " + newLat).openPopup();
+*/
+    // updated coords marker.
+
+    // if input long and input lat != newLong and newLat update marker.
+
+    function checkCoords(){
+    	// quick fix to updated coordinates..
+    	if(inputLat != newLat || inputLong != newLong){
+    		L.marker([inputLat, inputLong]).addTo(map) // should not be needed
+    			.bindPopup("<b>new coordinates for user :</b><br />Long: " + inputLong + "Lat: " + inputLat).openPopup();
+      //return Page.sendMessage()
+    	}
+    }
+
+
+</script>
+
+
+</body>
+</html>
