@@ -312,7 +312,7 @@
       }
       query = "SELECT message.*, keyvalue.value AS cert_user_id FROM message\nLEFT JOIN json AS data_json USING (json_id)\nLEFT JOIN json AS content_json ON (\n    data_json.directory = content_json.directory AND content_json.file_name = 'content.json'\n)\nLEFT JOIN keyvalue ON (keyvalue.key = 'cert_user_id' AND keyvalue.json_id = content_json.json_id)\nORDER BY date_added DESC";
       if (mode !== "nolimit") {
-        query += " LIMIT 60";
+        query += " LIMIT 100";
       }
       this.cmd("dbQuery", [query], (function(_this) {
         return function(messages) {
@@ -322,34 +322,56 @@
 
           document.getElementById("messages").innerHTML = "";
           message_lines = [];
+
+          // lon and lat arr added. No bueno yet.
+          var latArr = [];
+          var lonArr = [];
+          var userList = [];
+          var counter = 0;
+
           for (_i = 0, _len = messages.length; _i < _len; _i++) {
             message = messages[_i];
         //    console.log(message);
             if (message.date_added > (+(new Date)) + 60 * 3) {
               continue;
             }
+
+
 //            console.log(JSON.stringify(messages)); // gives us a parsed json of compelte db
             //alert(JSON.stringify(messages));
             // the two lines below work to display data. however, it does not replace data yet.
             //            console.log(message.lat); // fix the race condition
-
               //  document.getElementById('demo').innerHTML += '<br/>' + 'User: ' + message.cert_user_id + ' New Long : ' + message.lon + ' New Lat : ' + message.lat;
               // remove above to display all coordinates.
+
                 L.marker([message.lat, message.lon]).addTo(map)
-                  .bindPopup("<b>new coordinates for user :</b> " + message.cert_user_id +" <br />Long: " + message.lon + "Lat: " + message.lat).openPopup();
+                  .bindPopup("<b>new coordinates for user :</b> " + message.cert_user_id +" <br />Long: " + message.lon + "Lat: " + message.lat + " counter: " + counter).openPopup();
                   newDate = message.date_added;
+                  counter++;
+
             //      console.log(newDate);
 
+//            myFunction();
+
+//            for(k = 0; k < messages.length; k++){
+                  userList[_i] = message.cert_user_id;
+
+                  latArr[_i] = message.lat;
+                  lonArr[_i] = message.lon;
+  //          }
+
+//            console.log(latArr, lonArr);
+
 // need to add replace here as well.
-//            lon = message.lon.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-//            lat = message.lat.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            lon = message.lon.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            lat = message.lat.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             body = message.body.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             added = new Date(message.date_added);
 //            message_lines.push("<li><small title='" + added + "'>" + (Time.since(message.date_added / 1000)) + "</small> <b style='color: " + (Text.toColor(message.cert_user_id)) + "'>" + (message.cert_user_id.replace('@zeroid.bit', '')) + "</b>: " + body + "</li>");
 // above triggers / removes chat box.
           }
 
-// following is attempt to sort by user... Not working yet... 
+// following is attempt to sort by user... Not working yet...
           var userSort;
           var usersUnique = [];
           for (_i = 0, _len = messages.length; _i < _len; _i++) {
@@ -357,10 +379,12 @@
               continue;
             }
             userSort = messages[_i];
-            console.log(userSort);
-            console.log(message.cert_user_id);
+  //          console.log(userSort); // shows entire user info.
+  //          console.log(message.cert_user_id);
           }
       //    console.log(usersUnique[4]);
+
+
 
 //          console.log(message.cert_user_id);
           // This following loop should give us newest post for all users. need to sort out unique id first though
@@ -378,6 +402,35 @@
 
 */
 
+// shows unique users
+  // by removing duplicates from user Array.
+result = removeDuplicates(userList);
+//  console.log(userList);
+//  console.log(result);
+
+
+// this output gives us either the first or last Lat and Long of ALL the users..
+// need to first sort by users then the loop to add coords to this array per user.
+
+//make this a good loop to display unique users woth their coordinates.... Then we can style from there... Also separate main and dashboard pages.
+document.getElementById('demo').innerHTML = '<br/>' + ' New Long : ' + latArr[1] + ' User : ' + userList[1];
+//document.getElementById('demo').innerHTML = '<br/>' + ' New Long : ' + latArr[messages.length-1] + ' User : ' + userList[messages.length-1];
+
+
+var resultPrint
+
+for(var _k = 0; _k < result.length; _k++){
+//  document.getElementById('users').innerHTML += '<br/>' + ' User : ' + result[_k];
+  resultPrint += '<br/>' + ' User : ' + result[_k];
+}
+
+document.getElementById('users').innerHTML = resultPrint;
+console.log(resultPrint)
+
+//console.log(latArr[1], lonArr[1]);
+
+//console.log(userList);
+
             // newest post loop end
 
           if (mode !== "nolimit") {
@@ -389,6 +442,20 @@
       return false;
     };
 
+    function removeDuplicates(num) {
+      var x,
+          len=num.length,
+          out=[],
+          obj={};
+
+      for (x=0; x<len; x++) {
+        obj[num[x]]=0;
+      }
+      for (x in obj) {
+        out.push(x);
+      }
+      return out;
+    }
 
 
     ZeroChat.prototype.addLine = function(line) {

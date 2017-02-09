@@ -41,7 +41,10 @@ small { color: #999; width: 130px; display: inline-block; text-align: right; mar
     <INPUT TYPE="button" NAME="button" Value="Update Cords from input" onClick="testResults(this.form)">
 </FORM>
 
-<p id="demo">Updated Coordinates</p>
+<p id="demo"><b>Current User Coords:</b></p>
+
+
+<p id="users"><b>Last users:</b></p>
 
 
 <input type="button" id="btn" value="long" onClick="lonGet()"/>
@@ -125,11 +128,13 @@ var inputBoxLat;
   // tileLayer from zoom 10 to 19 local on server.  add higher zooms later from ipfs
 
 // IPFS map tiles local
+/*
 	minZoom: 10
   L.tileLayer('http://127.0.0.1:8080/ipfs/QmT9MT3Jg1aiXjBnEkAMRgqXvR5xAYg4WR4JieBbjACQc2/{z}/{x}/{y}.png', {
       maxZoom: 19,
   }).addTo(map);
 
+*/
 /*
   minZoom: 10
   L.tileLayer('http://127.0.0.1:8082/ipfs/QmT9MT3Jg1aiXjBnEkAMRgqXvR5xAYg4WR4JieBbjACQc2/{z}/{x}/{y}.png', {
@@ -161,6 +166,22 @@ L.tileLayer('http://ipfs.io/ipfs/QmT9MT3Jg1aiXjBnEkAMRgqXvR5xAYg4WR4JieBbjACQc2/
     	}
     }
 
+
+/*
+    line code
+
+    var pointA = new L.LatLng(27.96, -82.4444);
+    var pointB = new L.LatLng(27.70641, -82.984);
+    var pointList = [pointA, pointB];
+
+    var firstpolyline = new L.Polyline(pointList, {
+        color: 'red',
+        weight: 3,
+        opacity: 0.5,
+        smoothFactor: 1
+    });
+    firstpolyline.addTo(map);
+*/
 
 </script>
 
