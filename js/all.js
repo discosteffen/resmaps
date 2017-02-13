@@ -434,6 +434,8 @@ for (var x = 0 ; x < distinct.length; x++){
   document.getElementById('totalUsers').innerHTML = 'Total Users: ' + (x+1);
   document.getElementById('demo').innerHTML += '<br/>' + ' User : ' + distinct[x] + ' Is at (arraylocation) : ' +  lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()];
 
+  document.getElementById('lastUsers').innerHTML += '<br/>' + ' <input type="checkbox" id="cbox1" value="first_checkbox"> ' + ' User : ' + distinct[x];
+
   // currently shows only the last distinct x in the loop. need to do each step. hm.
 
 

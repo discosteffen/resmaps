@@ -2,7 +2,7 @@
 <head>
 
 <style>
-* { font-family: monospace; line-height: 1.5em; font-size: 13px; vertical-align: middle; }
+* { font-family: Arial; line-height: 1.5em; font-size: 13px; vertical-align: middle; }
 body { background-color: white; backface-visibility: hidden; }
 input#message { padding: 5px; width: 50%; height: 34px; }
 input#send { height: 34px; margin-left: -2px; }
@@ -11,6 +11,8 @@ li { list-style-type: none; border-top: 1px solid #eee; padding: 5px 0px; paddin
 li:nth-child(odd) { background-color: #F9FAFD; }
 li b { color: #3F51B5; }
 small { color: #999; width: 130px; display: inline-block; text-align: right; margin-left: -136px; }
+p#totalUsers {font-family: Arial; line-height: 1.5em; font-size: 17px; vertical-align: middle;}
+
 </style>
 
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
@@ -23,13 +25,12 @@ small { color: #999; width: 130px; display: inline-block; text-align: right; mar
 </head>
 <body>
 
-<a href="#Select+user" id="select_user" onclick='return Page.selectUser()'>Select user</a>:
-<input type="hidden" id="message" onkeypress="if (event.keyCode == 13) Page.sendMessage()"><input type="button" id="send" value="Send!" onclick="return Page.sendMessage()"/>
-
-<div id="mapid" style="width: 1000px; height: 800px;"></div>
+<div id="mapid" style="width: 100%; height: 800px;"></div>
 
 <!-- below form saves lat and lon to specific json file. -->
+<a href="#Select+user" id="select_user" onclick='return Page.selectUser()'>Select user</a>:
 
+<input type="hidden" id="message" onkeypress="if (event.keyCode == 13) Page.sendMessage()"><input type="button" id="send" value="Send!" onclick="return Page.sendMessage()"/>
 
 
 <p> Punch input on gps </o>
@@ -42,12 +43,14 @@ small { color: #999; width: 130px; display: inline-block; text-align: right; mar
 </FORM>
 <p>Newest update might issue undefined. Lets go test. Looks like some weird semi race condition</p>
 
+Pick users to follow:
+<p id="selecToFollow">Users:<p/>
 
 <p id="totalUsers">Total users: </p>
 <p id="demo"><b>Current User Coords:</b></p>
 
 
-<p id="users"><b>Last users:</b></p>
+<p id="lastUsers"><b>Last  5 users:</b> Select to follow</p>
 
 
 <input type="button" id="btn" value="long" onClick="lonGet()"/>
@@ -90,9 +93,6 @@ small { color: #999; width: 130px; display: inline-block; text-align: right; mar
 
 <script LANGUAGE="JavaScript">
 
-// set variables to location default. Can parse the GPS data here when in app. Or even do geolocation
-// if available...
-
 var newLong = -82.4445969;
 var newLat = 27.9617669;
 
@@ -122,13 +122,8 @@ var inputBoxLat;
   }
 
 
-	var map = L.map('mapid').setView([27.961813431845286, -82.44434137273832], 14);
+	var map = L.map('mapid').setView([27.961813431845286, -82.44434137273832], 15);
 
-// world side try to use general ipfs for this one since they already generated tiles... if possible
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			minZoom: 0,
-			maxZoom: 17
-	}).addTo(map);
 
   // tileLayer from zoom 10 to 19 local on server.  add higher zooms later from ipfs
 
@@ -155,6 +150,13 @@ L.tileLayer('http://ipfs.io/ipfs/QmT9MT3Jg1aiXjBnEkAMRgqXvR5xAYg4WR4JieBbjACQc2/
 }).addTo(map);
 
   // basecamp marker
+
+  // world side try to use general ipfs for this one since they already generated tiles... if possible
+  	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  			minZoom: 0,
+  			maxZoom: 17
+  	}).addTo(map);
+
 
 /*
 	L.marker([27.9617669, -82.4445969]).addTo(map)
