@@ -280,7 +280,6 @@
 //            "lon": document.getElementById("lon").value,
               "lon": AndroidFunctionLong.getString(),
               "lat": AndroidFunctionLat.getString(),
-
 //            "lat": document.getElementById("lat").value,
             "date_added": +(new Date)
           });
@@ -336,31 +335,28 @@
               continue;
             }
 
+              userList[_i] = message.cert_user_id;
+              latArr[_i] = message.lat;
+              lonArr[_i] = message.lon;
 
 //            console.log(JSON.stringify(messages)); // gives us a parsed json of compelte db
-            //alert(JSON.stringify(messages));
+
             // the two lines below work to display data. however, it does not replace data yet.
             //            console.log(message.lat); // fix the race condition
               //  document.getElementById('demo').innerHTML += '<br/>' + 'User: ' + message.cert_user_id + ' New Long : ' + message.lon + ' New Lat : ' + message.lat;
               // remove above to display all coordinates.
 
+              //            myFunction();
+              //            console.log(latArr, lonArr);
+
+/*
                 L.marker([message.lat, message.lon]).addTo(map)
                   .bindPopup("<b>new coordinates for user :</b> " + message.cert_user_id +" <br />Long: " + message.lon + "Lat: " + message.lat + " counter: " + counter).openPopup();
                   newDate = message.date_added;
                   counter++;
-
+*/
             //      console.log(newDate);
 
-//            myFunction();
-
-//            for(k = 0; k < messages.length; k++){
-                  userList[_i] = message.cert_user_id;
-
-                  latArr[_i] = message.lat;
-                  lonArr[_i] = message.lon;
-  //          }
-
-//            console.log(latArr, lonArr);
 
 // need to add replace here as well.
             lon = message.lon.replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -379,11 +375,136 @@
               continue;
             }
             userSort = messages[_i];
-  //          console.log(userSort); // shows entire user info.
+            usersUnique[_i] = messages[_i];
+
+//            console.log(userSort); // shows entire user info.
   //          console.log(message.cert_user_id);
           }
-      //    console.log(usersUnique[4]);
+//          console.log(usersUnique[14]);
 
+/*      var obj = messages;
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          var val = obj[key];
+          console.log((val));
+        }
+      }
+*/
+
+
+// finds unique linked ID to cert user ID. What good is this though?
+var array = messages;
+var unique = {};
+var distinct = [];
+
+      for( var i in array ){
+       if( typeof(unique[array[i].json_id]) == "undefined"){
+        distinct.push(array[i].cert_user_id);
+       }
+       unique[array[i].json_id] = 0;
+      }
+
+//console.log(distinct);
+
+var results = [];
+var lats = [];
+var longs = [];
+var searchField = "cert_user_id";
+//var obj2 = messages;
+
+//console.log(distinct);
+
+// another test
+
+var seats = [];
+var numbers = [];
+
+for (var i = 0; i < array.length; i++){
+  seats[i] = array[i].cert_user_id;
+//  console.log(seats[i]);
+}
+
+
+// shows last known lat and long per user.
+document.getElementById('demo').innerHTML = ' ';
+
+for (var x = 0 ; x < distinct.length; x++){
+  console.log(distinct[x] + " is at : "+ lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()]);
+
+  document.getElementById('totalUsers').innerHTML = 'Total Users: ' + (x+1);
+  document.getElementById('demo').innerHTML += '<br/>' + ' User : ' + distinct[x] + ' Is at (arraylocation) : ' +  lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()];
+
+  // currently shows only the last distinct x in the loop. need to do each step. hm.
+
+
+// need to do something about coordinates being undefined... This causes map to not load.
+//if (typeof variable === 'undefined')
+
+
+if(latArr[lastUserLocation()] == null)
+//(typeof latArr[lastUserLocation()] === 'undefined')
+{
+    // quickfix for undefined variable. this wont work once we pass the count for separate users. Need to do a + 1 per user for this scenario or solve in different way
+    console.log("Error, delayed post for newest GPS, Will update soon loading dirrect from jscript variable instead of db");
+    L.marker([latArr[x+1], lonArr[x+1]]).addTo(map)
+      .bindPopup("<b>new coordinates for user :</b> " + distinct[x+1] +" <br />Long: " + lonArr[lastUserLocation()+1] + "Lat: " + latArr[lastUserLocation()+1]).openPopup();
+      newDate = message.date_added;
+
+}
+else{
+
+    console.log("Load away");
+    L.marker([latArr[lastUserLocation()], lonArr[lastUserLocation()]]).addTo(map)
+      .bindPopup("<b>new coordinates for user :</b> " + distinct[x] +" <br />Long: " + lonArr[lastUserLocation()] + "Lat: " + latArr[lastUserLocation()]).openPopup();
+      newDate = message.date_added;
+
+}
+  numbers[x] = lastUserLocation();
+//  console.log(numbers); just displays the numbers in the array of users logged
+}
+
+function lastUserLocation()
+{
+    for(index in seats)
+    {
+        if(seats[index] === distinct[x])
+            return index;
+    }
+    return -1;
+}
+
+//console.log(lastUserLocation());
+
+// check nr of entry place.
+
+
+for (var x = 0 ; x < distinct.length; x++){
+
+  var searchVal = distinct[x];
+
+  for (var i=0 ; i < usersUnique.length ; i++)
+  {
+      if (usersUnique[i][searchField] == searchVal) {
+  //        results.push(usersUnique[i].lon);
+//          console.log(usersUnique[i][searchField]);
+  //        console.log(searchVal);
+      }
+      else {
+
+      }
+
+    //console.log(usersUnique[i][searchField]);
+  //console.log(searchField);
+  }
+
+//    console.log(searchVal);
+//  console.log(results);
+//  console.log(distinct[x] + " " + x);
+
+}
+
+
+//console.log(unique);
 
 
 //          console.log(message.cert_user_id);
@@ -409,27 +530,28 @@ result = removeDuplicates(userList);
 //  console.log(result);
 
 
-// this output gives us either the first or last Lat and Long of ALL the users..
-// need to first sort by users then the loop to add coords to this array per user.
+            // this output gives us either the first or last Lat and Long of ALL the users..
+            // need to first sort by users then the loop to add coords to this array per user.
 
-//make this a good loop to display unique users woth their coordinates.... Then we can style from there... Also separate main and dashboard pages.
-document.getElementById('demo').innerHTML = '<br/>' + ' New Long : ' + latArr[1] + ' User : ' + userList[1];
-//document.getElementById('demo').innerHTML = '<br/>' + ' New Long : ' + latArr[messages.length-1] + ' User : ' + userList[messages.length-1];
+            //make this a good loop to display unique users woth their coordinates.... Then we can style from there... Also separate main and dashboard pages.
+//            document.getElementById('demo').innerHTML = '<br/>' + ' New Long : ' + latArr[1] + ' User : ' + userList[1];
+            //document.getElementById('demo').innerHTML = '<br/>' + ' New Long : ' + latArr[messages.length-1] + ' User : ' + userList[messages.length-1];
 
 
-var resultPrint
+            var resultPrint
 
-for(var _k = 0; _k < result.length; _k++){
-//  document.getElementById('users').innerHTML += '<br/>' + ' User : ' + result[_k];
-  resultPrint += '<br/>' + ' User : ' + result[_k];
-}
+              resultPrint = '<br/>' + ' User : ' + result[0] + " Count: " + 0;
+            for(var _k = 1; _k < result.length; _k++){
+            //  document.getElementById('users').innerHTML += '<br/>' + ' User : ' + result[_k];
+              resultPrint += '<br/>' + ' User : ' + result[_k] + " Count: " + _k;
+            }
 
-document.getElementById('users').innerHTML = resultPrint;
-console.log(resultPrint)
+//            document.getElementById('users').innerHTML = resultPrint;
+//            console.log(resultPrint)
 
-//console.log(latArr[1], lonArr[1]);
+            //console.log(latArr[1], lonArr[1]);
 
-//console.log(userList);
+            //console.log(userList);
 
             // newest post loop end
 
@@ -456,6 +578,14 @@ console.log(resultPrint)
       }
       return out;
     }
+
+
+    ZeroChat.prototype.addMapCords = function(cords) {
+      var messages;
+      messages = document.getElementById("messages");
+      return messages.innerHTML = ("<li>" + line + "</li>") + messages.innerHTML;
+    };
+
 
 
     ZeroChat.prototype.addLine = function(line) {
