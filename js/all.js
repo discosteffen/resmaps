@@ -379,8 +379,13 @@
 
 //            console.log(userSort); // shows entire user info.
   //          console.log(message.cert_user_id);
+  document.getElementById('currentUsers').innerHTML += '<br/>' + ' User : ' + usersUnique[_i].cert_user_id + ' Is at (arraylocation) : ' +  _i + " Lon : " + lonArr[_i] + " Lat : " + latArr[_i];
+
+  //      console.log(usersUnique[_i].lon);
           }
-//          console.log(usersUnique[14]);
+  //        console.log(usersUnique[14].lon);
+//          document.getElementById('currentUsers').innerHTML += '<br/>' + ' User : ' + usersUnique[_i] + ' Is at (arraylocation) : ' +  lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()];
+
 
 /*      var obj = messages;
       for (var key in obj) {
@@ -426,15 +431,14 @@ for (var i = 0; i < array.length; i++){
 
 
 // shows last known lat and long per user.
-document.getElementById('currentUsers').innerHTML = ' ';
+document.getElementById('lastUsers').innerHTML = ' ';
 
 for (var x = 0 ; x < distinct.length; x++){
   console.log(distinct[x] + " is at : "+ lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()]);
 
-  document.getElementById('totalUsers').innerHTML = 'Total Users: ' + (x+1);
-  document.getElementById('currentUsers').innerHTML += '<br/>' + ' User : ' + distinct[x] + ' Is at (arraylocation) : ' +  lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()];
-
-  document.getElementById('lastUsers').innerHTML += '<br/>' + ' <input type="checkbox" id="cbox1" value="first_checkbox"> ' + ' User : ' + distinct[x];
+//  document.getElementById('totalUsers').innerHTML = 'Total Users: ' + (x+1);
+//  document.getElementById('currentUsers').innerHTML += '<br/>' + ' User : ' + distinct[x] + ' Is at (arraylocation) : ' +  lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()];
+document.getElementById('lastUsers').innerHTML += '<br/>' + ' <input type="checkbox" id="cbox1" value="first_checkbox"> ' + ' User : ' + distinct[x];
 
   // currently shows only the last distinct x in the loop. need to do each step. hm.
 
