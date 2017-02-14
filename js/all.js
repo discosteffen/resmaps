@@ -343,7 +343,7 @@
 
             // the two lines below work to display data. however, it does not replace data yet.
             //            console.log(message.lat); // fix the race condition
-              //  document.getElementById('demo').innerHTML += '<br/>' + 'User: ' + message.cert_user_id + ' New Long : ' + message.lon + ' New Lat : ' + message.lat;
+              //  document.getElementById('currentUsers').innerHTML += '<br/>' + 'User: ' + message.cert_user_id + ' New Long : ' + message.lon + ' New Lat : ' + message.lat;
               // remove above to display all coordinates.
 
               //            myFunction();
@@ -426,13 +426,13 @@ for (var i = 0; i < array.length; i++){
 
 
 // shows last known lat and long per user.
-document.getElementById('demo').innerHTML = ' ';
+document.getElementById('currentUsers').innerHTML = ' ';
 
 for (var x = 0 ; x < distinct.length; x++){
   console.log(distinct[x] + " is at : "+ lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()]);
 
   document.getElementById('totalUsers').innerHTML = 'Total Users: ' + (x+1);
-  document.getElementById('demo').innerHTML += '<br/>' + ' User : ' + distinct[x] + ' Is at (arraylocation) : ' +  lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()];
+  document.getElementById('currentUsers').innerHTML += '<br/>' + ' User : ' + distinct[x] + ' Is at (arraylocation) : ' +  lastUserLocation() + " Lon : " + lonArr[lastUserLocation()] + " Lat : " + latArr[lastUserLocation()];
 
   document.getElementById('lastUsers').innerHTML += '<br/>' + ' <input type="checkbox" id="cbox1" value="first_checkbox"> ' + ' User : ' + distinct[x];
 
@@ -462,7 +462,7 @@ else{
 
 }
   numbers[x] = lastUserLocation();
-//  console.log(numbers); just displays the numbers in the array of users logged
+  console.log(numbers); //just displays the numbers in the array of users logged
 }
 
 function lastUserLocation()
@@ -536,8 +536,8 @@ result = removeDuplicates(userList);
             // need to first sort by users then the loop to add coords to this array per user.
 
             //make this a good loop to display unique users woth their coordinates.... Then we can style from there... Also separate main and dashboard pages.
-//            document.getElementById('demo').innerHTML = '<br/>' + ' New Long : ' + latArr[1] + ' User : ' + userList[1];
-            //document.getElementById('demo').innerHTML = '<br/>' + ' New Long : ' + latArr[messages.length-1] + ' User : ' + userList[messages.length-1];
+//            document.getElementById('currentUsers').innerHTML = '<br/>' + ' New Long : ' + latArr[1] + ' User : ' + userList[1];
+            //document.getElementById('currentUsers').innerHTML = '<br/>' + ' New Long : ' + latArr[messages.length-1] + ' User : ' + userList[messages.length-1];
 
 
             var resultPrint

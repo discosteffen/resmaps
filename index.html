@@ -11,9 +11,93 @@ li { list-style-type: none; border-top: 1px solid #eee; padding: 5px 0px; paddin
 li:nth-child(odd) { background-color: #F9FAFD; }
 li b { color: #3F51B5; }
 small { color: #999; width: 130px; display: inline-block; text-align: right; margin-left: -136px; }
+
 p#totalUsers {font-family: Arial; line-height: 1.5em; font-size: 17px; vertical-align: middle;}
 
+p#lastUsers {float: left; margin-bottom: 150px;}
+p#currentUsers {float: right;}
+
+#select_user{
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  width: 100%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+  vertical-align:middle;
+  text-decoration: none;
+  float: left;
+  display: inline-block;
+  font-size: 16px;
+}
+
+#select_user:hover{
+  background-color: #000; /* Green */
+}
+
+#linkButtons{
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  width: 100%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+  vertical-align:middle;
+  text-decoration: none;
+  float: left;
+  display: inline-block;
+  font-size: 16px;
+}
+
+#linkButtons:hover{
+  background-color: #000; /* Green */
+}
+
+
+#updateButton {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    width: 100%;
+    padding: 30px;
+    text-align: center;
+    text-decoration: none;
+    float: left;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#updateButton:hover{
+  background-color: #000; /* Green */
+}
+
+
+#send{
+  display: none;
+}
+
+#btn{
+  float: left;
+}
+
+.left{float:left; width:20%;
+  background-color: #4CAF50; /* Green */
+  height: 10%;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align:middle;
+}
+
+.left:hover{
+  background-color: #FFF; /* Green */
+}
+
+
 </style>
+
 
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 <!--script type="text/javascript" src="http://127.0.0.1:43110:/1CyX49a6rLzzVqzKd5PkHCEhJi5bNAk7g/data/users/1F1kPoaP6gYYXVrVdPqMidEuticzVyUrny/data.json"></script-->
@@ -25,34 +109,86 @@ p#totalUsers {font-family: Arial; line-height: 1.5em; font-size: 17px; vertical-
 </head>
 <body>
 
+  <div class="left">
+    <a href="#Select+user" id="select_user" onclick='return Page.selectUser()'>Select user</a>:
+  </div>
+
+  <div class="left"><FORM NAME="myform" ACTION="" METHOD="GET">
+      <!--label>Enter Long : </label> <INPUT TYPE="text" NAME="inputBoxLong" VALUE=""><P>
+      <label>Enter Lat : </label> <INPUT TYPE="text" NAME="inputBoxLat" VALUE=""><P-->
+
+      <INPUT TYPE="button" id="updateButton" NAME="button" Value="Update Cords" onClick="return Page.sendMessage()">
+      <!--INPUT TYPE="button" NAME="button" Value="Update Cords from input" onClick="testResults(this.form)"-->
+  </FORM>
+  </div>
+  <div class="left">
+    <a href="liveTracker" id="linkButtons">Live Tracking</a>
+  </div>
+
+  <div class="left">
+    <a href="liveTracker" id="linkButtons">User Tracking</a>
+  </div>
+
+
+  <div class="left">
+    <a href="liveTracker" id="linkButtons">Data</a>
+  </div>
+
+
 <div id="mapid" style="width: 100%; height: 800px;"></div>
 
 <!-- below form saves lat and lon to specific json file. -->
-<a href="#Select+user" id="select_user" onclick='return Page.selectUser()'>Select user</a>:
+
+<div class="left">
+  <a href="#Select+user" id="select_user" onclick='return Page.selectUser()'>Select user</a>:
+</div>
+
+<div class="left"><FORM NAME="myform" ACTION="" METHOD="GET">
+    <!--label>Enter Long : </label> <INPUT TYPE="text" NAME="inputBoxLong" VALUE=""><P>
+    <label>Enter Lat : </label> <INPUT TYPE="text" NAME="inputBoxLat" VALUE=""><P-->
+
+    <INPUT TYPE="button" id="updateButton" NAME="button" Value="Update Cords" onClick="return Page.sendMessage()">
+    <!--INPUT TYPE="button" NAME="button" Value="Update Cords from input" onClick="testResults(this.form)"-->
+</FORM>
+</div>
+<div class="left">
+  <a href="liveTracker" id="linkButtons">Live Tracking</a>
+</div>
+
+<div class="left">
+  <a href="liveTracker" id="linkButtons">User Tracking</a>
+</div>
+
+
+<div class="left">
+  <a href="liveTracker" id="linkButtons">Data</a>
+</div>
+
 
 <input type="hidden" id="message" onkeypress="if (event.keyCode == 13) Page.sendMessage()"><input type="button" id="send" value="Send!" onclick="return Page.sendMessage()"/>
 
 
-<p> Punch input on gps </o>
+<!--p> Punch input on gps </o>
 <FORM NAME="myform" ACTION="" METHOD="GET">Update Coordinates: <br/><br/>
-    <!--label>Enter Long : </label> <INPUT TYPE="text" NAME="inputBoxLong" VALUE=""><P>
-    <label>Enter Lat : </label> <INPUT TYPE="text" NAME="inputBoxLat" VALUE=""><P-->
-    <INPUT TYPE="button" NAME="button" Value="Update Cords" onClick="return Page.sendMessage()">
+    <label>Enter Long : </label> <INPUT TYPE="text" NAME="inputBoxLong" VALUE=""><P>
+    <label>Enter Lat : </label> <INPUT TYPE="text" NAME="inputBoxLat" VALUE=""><P>
 
-    <!--INPUT TYPE="button" NAME="button" Value="Update Cords from input" onClick="testResults(this.form)"-->
-</FORM>
-<p>Newest update might issue undefined. Lets go test. Looks like some weird semi race condition</p>
+    <INPUT TYPE="button" id="updateButton" NAME="button" Value="Update Cords" onClick="return Page.sendMessage()">
+    <INPUT TYPE="button" NAME="button" Value="Update Cords from input" onClick="testResults(this.form)">
+</FORM-->
 
-Pick users to follow:
 <p id="selecToFollow">Users:<p/>
 
 <p id="totalUsers">Total users: </p>
-<p id="demo"><b>Current User Coords:</b></p>
+
+<p id="currentUsers"><b>Current User Coords:</b></p>
 
 
 <p id="lastUsers"><b>Last  5 users:</b> Select to follow</p>
 
 
+
+<p>Temp mobile check buttons</p>
 <input type="button" id="btn" value="long" onClick="lonGet()"/>
 <input type="button" id="btn" value="lat" onClick="latGet()"/>
 
@@ -60,9 +196,18 @@ Pick users to follow:
 
 <p id="p">Lat / Lon (quicktest so make sure app is paring correclty)</p>
 
+<p>
+Ignore things for now:
+Newest update might issue undefined. Lets go test. Looks like some weird semi race condition<br/>
+ Ignore zoom / pan on phone app for now, it will be causing issues due to webview. Will fix this whever done with dashboard. <br/>
+
+</p>
+
 <ul id="messages">
  <li>map chat</li>
 </ul>
+
+
 
 
 <!--"testResults(this.form)"-->
@@ -102,10 +247,6 @@ var newLat = 27.9617669;
 
 function testResults (form) {
 // from android
-//  var androidLong = AndroidFunctionLong.getString();
-//  var androidLat = AndroidFunctionLat.getString();
-
-alert("Test");
 
 var inputBoxLong;
 var inputBoxLat;
