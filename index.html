@@ -84,7 +84,7 @@ p#currentUsers {float: right;}
 
 .left{float:left; width:20%;
   background-color: #4CAF50; /* Green */
-  height: 10%;
+  height: 80px;
     font-size: 16px;
     text-align: center;
     text-decoration: none;
@@ -104,6 +104,7 @@ p#currentUsers {float: right;}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
 
+<script src="js/animated.js"></script>
 
 
 </head>
@@ -135,36 +136,13 @@ p#currentUsers {float: right;}
   </div>
 
 
-<div id="mapid" style="width: 100%; height: 800px;"></div>
+<div id="mapid" style="width: 100%; height: 80%; max-height: 700px"></div>
 
 <!-- below form saves lat and lon to specific json file. -->
 
-<div class="left">
-  <a href="#Select+user" id="select_user" onclick='return Page.selectUser()'>Select user</a>:
-</div>
-
-<div class="left"><FORM NAME="myform" ACTION="" METHOD="GET">
-    <!--label>Enter Long : </label> <INPUT TYPE="text" NAME="inputBoxLong" VALUE=""><P>
-    <label>Enter Lat : </label> <INPUT TYPE="text" NAME="inputBoxLat" VALUE=""><P-->
-
-    <INPUT TYPE="button" id="updateButton" NAME="button" Value="Update Cords" onClick="return Page.sendMessage()">
-    <!--INPUT TYPE="button" NAME="button" Value="Update Cords from input" onClick="testResults(this.form)"-->
-</FORM>
-</div>
-<div class="left">
-  <a href="liveTracker" id="linkButtons">Live Tracking</a>
-</div>
-
-<div class="left">
-  <a href="liveTracker" id="linkButtons">User Tracking</a>
-</div>
 
 
-<div class="left">
-  <a href="liveTracker" id="linkButtons">Data</a>
-</div>
-
-
+<!-- This one needs to be here., well not here but somewhere. -->
 <input type="hidden" id="message" onkeypress="if (event.keyCode == 13) Page.sendMessage()"><input type="button" id="send" value="Send!" onclick="return Page.sendMessage()"/>
 
 
@@ -263,7 +241,7 @@ var inputBoxLat;
   }
 
 
-	var map = L.map('mapid').setView([27.961813431845286, -82.44434137273832], 15);
+	var map = L.map('mapid').setView([27.961813431845286, -82.44434137273832], 17);
 
 
   // tileLayer from zoom 10 to 19 local on server.  add higher zooms later from ipfs
@@ -272,33 +250,34 @@ var inputBoxLat;
 /*
 	minZoom: 10
   L.tileLayer('http://127.0.0.1:8080/ipfs/QmT9MT3Jg1aiXjBnEkAMRgqXvR5xAYg4WR4JieBbjACQc2/{z}/{x}/{y}.png', {
-      maxZoom: 19,
+      maxZoom: 18,
   }).addTo(map);
 
 */
 /*
   minZoom: 10
   L.tileLayer('http://127.0.0.1:8082/ipfs/QmT9MT3Jg1aiXjBnEkAMRgqXvR5xAYg4WR4JieBbjACQc2/{z}/{x}/{y}.png', {
-      maxZoom: 19,
+      maxZoom: 18,
   }).addTo(map);
 */
 // ipfs gateway
 
 
 minZoom: 10
-L.tileLayer('http://ipfs.io/ipfs/QmT9MT3Jg1aiXjBnEkAMRgqXvR5xAYg4WR4JieBbjACQc2/{z}/{x}/{y}.png', {
-    maxZoom: 19,
+L.tileLayer('https://ipfs.io/ipfs/QmT9MT3Jg1aiXjBnEkAMRgqXvR5xAYg4WR4JieBbjACQc2/{z}/{x}/{y}.png', {
+    maxZoom: 18,
 }).addTo(map);
 
   // basecamp marker
 
   // world side try to use general ipfs for this one since they already generated tiles... if possible
+/*
   	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
   			minZoom: 0,
   			maxZoom: 17
   	}).addTo(map);
 
-
+*/
 /*
 	L.marker([27.9617669, -82.4445969]).addTo(map)
 		.bindPopup("<b>Hello world!</b><br />This is basecamp!. <br />Long: " + newLong + " Lat : " + newLat).openPopup();
@@ -315,6 +294,13 @@ L.tileLayer('http://ipfs.io/ipfs/QmT9MT3Jg1aiXjBnEkAMRgqXvR5xAYg4WR4JieBbjACQc2/
       //return Page.sendMessage()
     	}
     }
+
+
+    var line = L.polyline([[27.963570750897418, -82.44473346364538], [27.96220514115165, -82.44416036010703], [27.96192977210712, -82.44455285979471]]);
+    map.addLayer(line);
+
+      var animatedMarker = L.animatedMarker(line.getLatLngs());
+    map.addLayer(animatedMarker);
 
 
 /*
